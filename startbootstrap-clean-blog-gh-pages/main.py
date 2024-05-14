@@ -1,7 +1,7 @@
-import requests
-from flask import Flask, render_template
-from bs4 import BeautifulSoup
+import smtplib
 
+import requests
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -23,10 +23,36 @@ def about_me():
     return render_template('about.html')
 
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact_me():
-    return render_template('contact.html')
+    if request.method == "POST":
+        data = request.form
+        print(data['name'])
+        print(data['email'])
+        print(data['phone'])
+        print(data['message'])
+
+        name = data['name']
+        email = data['email']
+        phone = data['phone']
+        message = data['message']
+
+        send_message(name, email, phone, message)
+
+        return render_template('contact.html', msg=True)
+    return render_template('contact.html', msg=False)
+
+
+def send_message(name, email, phone, message):
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login("marshamark2020@gmail.com", "czck gvhv juvn uajz")
+        connection.sendmail(
+            from_addr="marshamark2020@gmail.com",
+            to_addrs="marshamark2020@gmail.com",
+            msg=f"Subject:New message\n\nName:{name}\nPhone NO:{phone}\nEmail:{email}\nMessage:{message}"
+        )
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=3000)
