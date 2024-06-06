@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="{{url_for('static', filename='css/blog.css')}}/" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poetsen+One&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poetsen+One&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='ckeditor') }}
+    <title>Document</title>
+</head>
+<style>
+    .post-title {
+    font-family: "Source Serif 4", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: ExtraBold;
+    }
+    .comments{
+    width:20%;
+    margin-left:130px;
+    padding:10px;
+    }
+    .top{
+    display:flex;
+
+    }
+    .top h6{
+    margin-left:10px;
+    margin-top:5px;
+    }
+    p{
+        text-align: left;
+    margin-left:10px;
+    }
+    .p_image{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    }
+    .p_image img{
+    border: 1px solid black;
+    width:100%;
+    height:100%
+    }
+
+    .r_content{
+    font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+    }
+
+</style>
+
+<body class="text-center">
+<div class="img-fluid text-center"
+     style="margin:10px auto;width:80%;height:350px;background-image: url('{{ url_for('static', filename='assets/img/about-bg.jpg')}}')">
+    <h2 class="post-title ">{{response.title}}</h2>
+    <h3 class="post-subtitle">{{response.subtitle}}</h3>
+</div>
+<div class="img-fluid text-center"
+     style="margin:10px auto;width:80%;height:auto;">
+    <p class="r_content">{{response.content | safe}}</p>
+    <p class="post-meta ">
+        Posted by
+        <a href="#!">{{response.name}}</a>
+        on {{response.dates}}
+    </p>
+</div>
+
+<div class="container">
+    <div class="form-container">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.blog_content.label(class="form-label") }}
+                {{ form.blog_content(class="form-control") }}
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Post Comment">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% for comment, username,user_email in comments %}
+<div class="comments">
+    <div class="top">
+        <div class="p_image">
+            <img class="p_image" src="https://www.gravatar.com/avatar/{{ user_email}}?s=80" alt="img">
+        </div>
+        <h6><i>{{username}}</i></h6>
+    </div>
+    <p style="margin-bottom: 0px;">{{comment.text | safe}}</p>
+</div>
+{%endfor%}
+
+<a href="{{ url_for('edit_post', post_id=response.id) }}" class="btn btn-primary btn-sm" style="margin:10px;">Edit
+    Blog</a>
+
+</body>
+</html>
