@@ -231,7 +231,7 @@ def register():
             login_form = LoginForm()
             return render_template('login.html', form=login_form)
 
-        user_registration = Users(user_email=email, user_name=username)
+        user_registration = Users(user_email = email, user_name=username)
         user_registration.secure_password(password)
         db.session.add(user_registration)
         db.session.commit()

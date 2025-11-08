@@ -23,6 +23,7 @@
   font-optical-sizing: auto;
   font-weight: 800;
   font-style: ExtraBold;
+  margin: 20px;
     }
     .comments{
     width:20%;
@@ -62,10 +63,11 @@
 </style>
 
 <body class="text-center">
+<h2 class="post-title ">{{response.title}}</h2>
+    <h3 class="post-subtitle">{{response.subtitle}}</h3>
 <div class="img-fluid text-center"
      style="margin:10px auto;width:80%;height:350px;background-image: url('{{ url_for('static', filename='assets/img/about-bg.jpg')}}')">
-    <h2 class="post-title ">{{response.title}}</h2>
-    <h3 class="post-subtitle">{{response.subtitle}}</h3>
+
 </div>
 <div class="img-fluid text-center"
      style="margin:10px auto;width:80%;height:auto;">
