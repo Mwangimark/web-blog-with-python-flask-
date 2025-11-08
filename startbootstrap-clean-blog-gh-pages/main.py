@@ -130,8 +130,13 @@ class BlogpostForm(FlaskForm):
 @login_required
 def blog_post(blog_post_id):
         form = BlogpostForm()
-        all_comments = db.session.query(Comment, Users.user_name, Users.user_email).join(Users).all()
+        # all_comments = db.session.query(Comment, Users.user_name, Users.user_email).join(Users).all()
         blog_selected = Blogs.query.filter_by(id=blog_post_id).first()
+        comments = db.session.query(Comment, Users.user_name, Users.user_email)\
+                        .join(Users)\
+                        .filter(Comment.post_id == blog_selected.id)\
+                        .all()
+        
         if form.validate_on_submit():
             user_comment = form.blog_content.data
             user_insert_comment = Comment(
@@ -141,9 +146,9 @@ def blog_post(blog_post_id):
                 )
             db.session.add(user_insert_comment)
             db.session.commit()
-            return render_template('blog.html', comments=all_comments, form=form, response=blog_selected)
+            return render_template('blog.html', comments=comments, form=form, response=blog_selected)
 
-        return render_template('blog.html',comments=all_comments, form=form, response=blog_selected)
+        return render_template('blog.html',comments=comments, form=form, response=blog_selected)
 
 
 # make a make-post form
